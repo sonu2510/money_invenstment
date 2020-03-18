@@ -26,8 +26,7 @@ $bradcums[] = array(
 //Close : bradcums
 
 //Start : edit
-
-$added_money_id = '';
+//$added_money_id = '';
 
 $edit = '';
 if(isset($_GET['added_money_id']) && !empty($_GET['added_money_id'])){
@@ -50,9 +49,9 @@ if(isset($_GET['added_money_id']) && !empty($_GET['added_money_id'])){
 
 //Close : edit
 
-
+//printr($edit);
 if($display_status){
-
+//printr($_POST);//die;
 //insert
 if(isset($_POST['btn_save'])){
 	$post = post($_POST);
@@ -95,13 +94,15 @@ if(isset($_POST['btn_update']) && $edit){
              </div>
          	<br>
          
-            <form class="form-horizontal" method="post" name="form" id="form" enctype="multipart/form-data">        
+            <form class="form-horizontal" method="post" name="form" id="form" action=""enctype="multipart/form-data">        
             
             		<div class="form-group has-success">
                          <div class="row">
                                 <label class="col-sm-2 control-label">Member Name</label>
                                      <div class="col-sm-6">
-                                              <input type="text" name="member_name" value="<?php echo isset($money['member_name'])?$money['member_name']:'';?>" class="form-control validate[required]" />
+                                              <input type="text" name="member_name" ID="member_name" value="<?php echo isset($money['member_name'])?$money['member_name']:'';?>" class="form-control validate[required]" />
+                                                <input type="hidden" name="member_id" id="member_id" value="<?php echo isset($money['member_id'])?$money['member_id']:'';?>" />
+                    							<div id="ajax_response"></div>
                                     </div>
                          </div>
                   </div>  
@@ -109,7 +110,7 @@ if(isset($_POST['btn_update']) && $edit){
                          <div class="row">
                                 <label class="col-sm-2 control-label">Date</label>
                                      <div class="col-sm-3">
-                                              <input type="date" name="date" value="<?php echo isset($money['date'])?$money['date']:'';?>" class="form-control validate[required]">
+                                              <input type="date" name="date"  value="<?php if(isset($money['date'])) { echo $money['date']; } else{ echo date("Y-m-d"); }?>" class="form-control validate[required]">
                                     </div>
 
                                 
@@ -132,18 +133,16 @@ if(isset($_POST['btn_update']) && $edit){
                           </div>
                   </div> 
                  
-				<div class="row">
-                <div class="col-md-8 col-md-offset-3">
-                	<center>                <?php if($edit){?>
+			  <div class="form-group has-success">
+                <div class="col-lg-9 col-lg-offset-3">
+                <?php if($edit){?>
                   	<button type="submit" name="btn_update" id="btn_update" class="btn btn-success btn-rounded m-b-10 m-l-5">Update </button>
                 <?php } else { ?>
                 	<button type="submit" name="btn_save" id="btn_save" class="btn btn-success btn-rounded m-b-10 m-l-5">Save </button>	
                 <?php } ?>  
                   <a class="btn btn-default btn-rounded m-b-10 m-l-5" href="<?php echo $obj_general->link($rout, '', '',1);?>">Cancel</a>
-               </center>
-
                 </div>
-                </div>
+              </div>
               
                </form>
           </div>
@@ -153,48 +152,199 @@ if(isset($_POST['btn_update']) && $edit){
     </div>
   </section>
 </section>
-
-<link rel="stylesheet" href="<?php echo HTTP_SERVER;?>js/validation/css/validationEngine.jquery.css" type="text/css"/>
-<script src="<?php echo HTTP_SERVER;?>js/validation/languages/jquery.validationEngine-en.js" type="text/javascript" charset="utf-8"></script> 
-<script src="<?php echo HTTP_SERVER;?>js/validation/jquery.validationEngine.js" type="text/javascript" charset="utf-8"></script> 
-<script src="<?php echo HTTP_SERVER;?>ckeditor3/ckeditor.js"></script>
 <style type="text/css">
-
+#ajax_response, #ajax_res,#ajax_return{
+	border : 1px solid #13c4a5;
+	background : #FFFFFF;
+	position:relative;
+	display:none;
+	padding:2px 2px;
+	top:auto;
+	border-radius: 4px;
 }
+#holder{
+	width : 350px;
+}
+.list {
+	padding:0px 0px;
+	margin:0px;
+	list-style : none;
+}
+.list li a{
+	text-align : left;
+	padding:2px;
+	cursor:pointer;
+	display:block;
+	text-decoration : none;
+	color:#000000;
+}
+.selected{
+	background : #13c4a5;
+}
+.bold{
+	font-weight:bold;
+	color: #227442;
+	
+}
+.select_choose{
+	width:100px;
+}
+
+
 </style>
 
-<script>
+  
 
-   
-	function checkUser(name){
-		var orgname = '<?php echo isset($money['user_name'])?$money['user_name']:'';?>';
-		if(name.length > 0 && orgname != name){
-			$(".uniqusername").remove();
-			var status_url = getUrl("<?php echo $obj_general->ajaxLink($rout, '&mod=ajax&fun=UserNameAlreadyExsist', '',1);?>");
-			$("#loading").show();
-			$.ajax({
-				url : status_url,
-				type :'post',
-				data :{name:name},
-				success: function(json) {
-					if(json > 0){
-						$("#user_name").val('');
-						$("#user_name").after('<span class="required uniqusername">Username already exists!</span>');
-						$("#loading").hide();
-						return false;
-					}else{
-						$("#loading").hide();
-						$(".uniqusername").remove();
-						return true;
+<link rel="stylesheet" href="<?php echo HTTP_SERVER;?>assets/js/validation/css/validationEngine.jquery.css" type="text/css"/>
+<script src="<?php echo HTTP_SERVER;?>assets/js/validation/languages/jquery.validationEngine-en.js" type="text/javascript" charset="utf-8"></script> 
+<script src="<?php echo HTTP_SERVER;?>assets/js/validation/jquery.validationEngine.js" type="text/javascript" charset="utf-8"></script> 
+
+<script type="text/javascript">
+	jQuery(document).ready(function(){
+
+
+$("#member_name").focus();
+
+	var offset = $("#product_item_id").offset();
+	
+	var width = $("#holder").width();
+	
+	$("#ajax_response").css("width",width);
+
+	//alert('qwufguifguyfg');	
+	$("#member_name").keyup(function(event){	
+	
+		 var keyword = $("#member_name").val();
+		
+		 if(keyword.length)
+		 {	
+			 if(event.keyCode != 40 && event.keyCode != 38 )
+			 {
+				 var product_url = getUrl("<?php echo $obj_general->ajaxLink($rout, 'mod=ajax&fun=member_Details', '',1);?>");
+				 $("#loading").css("visibility","visible");
+				 $.ajax({
+				   type: "POST",
+				   url: product_url,
+				   data: "member_name="+keyword,
+				   success: function(msg){	
+					 var msg = $.parseJSON(msg);
+				   var div='<ul class="list">';
+				   
+					if(msg.length>0)
+					{ 	
+						for(var i=0;i<msg.length;i++)
+						{	
+							div =div+'<li><a href=\'javascript:void(0);\' member_name ="'+msg[i].member_name+'" id="'+msg[i].member_id+'"  ><span class="bold" >'+msg[i].member_name+'</span></a></li>';
+						}
 					}
+					
+					div=div+'</ul>';
+				
+					if(msg != 0)
+					  $("#ajax_response").fadeIn("slow").html(div);
+					else
+					{
+						$("#ajax_response").fadeIn("slow");	
+						$("#ajax_response").html('<div style="text-align:left;">No Matches Found</div>');
+				  		$("#member_id").val('');
+				  	
+					}
+					$("#loading").css("visibility","hidden");
+				   }
+				 });
+			 }
+			 else
+			 {				
+				switch (event.keyCode)
+				{
+				 case 40:
+				 {
+					  found = 0;
+					  $(".list li").each(function(){
+						 if($(this).attr("class") == "selected")
+							found = 1;
+					  });
+					  if(found == 1)
+					  {
+						var sel = $(".list li[class='selected']");
+						sel.next().addClass("selected");
+						sel.removeClass("selected");										
+					  }
+					  else
+						$(".list li:first").addClass("selected");
+						if($(".list li[class='selected'] a").text()!='')
+						{
+							$("#member_name").val($(".list li[class='selected'] a").text());
+							$("#member_id").val($(".list li[class='selected'] a").attr("id"));
+							
+						}
 				}
-			});
-		}else{
-			$("#loading").hide();
-			$(".uniqusername").remove();
-			return true;
+				 break;
+				 case 38:
+				 {
+					  found = 0;
+					  $(".list li").each(function(){
+						 if($(this).attr("class") == "selected")
+							found = 1;
+					  });
+					  if(found == 1)
+					  {
+						var sel = $(".list li[class='selected']");
+						sel.prev().addClass("selected");
+						sel.removeClass("selected");
+					  }
+					  else
+						$(".list li:last").addClass("selected");
+						if($(".list li[class='selected'] a").text()!='')
+						{
+							$("#member_name").val($(".list li[class='selected'] a").text());
+							$("#member_id").val($(".list li[class='selected'] a").attr("id"));
+							
+						}
+				 }
+				 break;				 
+				}
+			 }
+		 }
+		 else
+		 {
+			$("#ajax_response").fadeOut('slow');
+			$("#ajax_response").html("");
+		 }
+	});
+	
+	$('#member_name').keydown( function(e) {
+		if (e.keyCode == 9) {
+			 $("#ajax_response").fadeOut('slow');
+			 $("#ajax_response").html("");
 		}
-	}
+	});
+
+	$("#ajax_response").mouseover(function(){
+				$(this).find(".list li a:first-child").mouseover(function () {
+					  $("#member_id").val($(this).attr("id"));
+					
+					  $(this).addClass("selected");
+				});
+				$(this).find(".list li a:first-child").mouseout(function () {
+					  $(this).removeClass("selected");
+					  $("#member_id").val('');
+					
+				});
+				$(this).find(".list li a:first-child").click(function () {
+					  $("#member_id").val($(this).attr("id"));
+					  
+					  
+					  $("#member_name").val($(this).text());
+					 $("#ajax_response").fadeOut('slow');
+					  $("#ajax_response").html("");
+					  
+					
+				});
+				
+			});
+    });
+	
 
 
 </script> 

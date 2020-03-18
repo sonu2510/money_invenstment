@@ -9,15 +9,15 @@
         <title>Focus Admin: Creative Admin Dashboard</title>
         <!-- ================= Favicon ================== -->
         <!-- Standard -->
-        <link rel="shortcut icon" href="http://placehold.it/64.png/000/fff">
+        <link rel="shortcut icon" href="https://placehold.it/64.png/000/fff">
         <!-- Retina iPad Touch Icon-->
-        <link rel="apple-touch-icon" sizes="144x144" href="http://placehold.it/144.png/000/fff">
+        <link rel="apple-touch-icon" sizes="144x144" href="https://placehold.it/144.png/000/fff">
         <!-- Retina iPhone Touch Icon-->
-        <link rel="apple-touch-icon" sizes="114x114" href="http://placehold.it/114.png/000/fff">
+        <link rel="apple-touch-icon" sizes="114x114" href="https://placehold.it/114.png/000/fff">
         <!-- Standard iPad Touch Icon-->
-        <link rel="apple-touch-icon" sizes="72x72" href="http://placehold.it/72.png/000/fff">
+        <link rel="apple-touch-icon" sizes="72x72" href="https://placehold.it/72.png/000/fff">
         <!-- Standard iPhone Touch Icon-->
-        <link rel="apple-touch-icon" sizes="57x57" href="http://placehold.it/57.png/000/fff">
+        <link rel="apple-touch-icon" sizes="57x57" href="https://placehold.it/57.png/000/fff">
         <!-- Styles -->
         <link href="<?php echo HTTP_SERVER;?>assets/css/lib/calendar2/semantic.ui.min.css" rel="stylesheet">
         <link href="<?php echo HTTP_SERVER;?>assets/css/lib/calendar2/pignose.calendar.min.css" rel="stylesheet">
@@ -32,7 +32,11 @@
         <link href="<?php echo HTTP_SERVER;?>assets/css/lib/helper.css" rel="stylesheet">
         <link href="<?php echo HTTP_SERVER;?>assets/css/style.css" rel="stylesheet">
         <link href="<?php echo HTTP_SERVER;?>assets/css/pagination.css" rel="stylesheet">
+             
             <script src="<?php echo HTTP_SERVER;?>assets/js/lib/jquery.min.js"></script>
+           <script src="<?php echo HTTP_SERVER;?>assets/js/lib/bootstrap.min.js"></script>
+            <script src="<?php echo HTTP_ADMIN;?>common/common.js"></script>
+          
     </head>
 
     <body>

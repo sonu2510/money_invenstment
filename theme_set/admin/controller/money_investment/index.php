@@ -154,7 +154,10 @@ if(isset($_POST['action']) && ($_POST['action'] == "active" || $_POST['action'] 
                      <?php if($obj_general->hasPermission('add',$menuId)){ ?>
                         <a class="btn btn-success btn-outline btn-rounded m-b-10 m-l-5" href="<?php echo $obj_general->link($rout, 'mod=add', '',1);?>"><i class="fa fa-plus"></i> New Money </a>
                     <?php } if($obj_general->hasPermission('delete',$menuId)){ ?>       
-                        <a class="btn btn-danger btn-outline btn-rounded m-b-10 m-l-5" onclick="formsubmitsetaction('form_list','delete','post[]','<?php echo DELETE_WARNING;?>')"><i class="fa fa-trash-o"></i> Delete</a>
+                        <a class="btn btn-danger btn-outline btn-rounded m-b-10 m-l-5"  data-toggle="modal"  onclick="formsubmitsetaction('form_list','delete','post[]','<?php echo DELETE_WARNING;?>')"><i class="fa fa-trash-o"></i> Delete</a>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+  Launch demo modal
+</button>
                     <?php } ?>
              </span>
           </div>
@@ -165,7 +168,7 @@ if(isset($_POST['action']) && ($_POST['action'] == "active" || $_POST['action'] 
  
         </div>
 
-          
+       
           <form name="form_list" id="form_list" method="post">   
           <input type="hidden" id="action" name="action" value="" /> 
             <div class="bootstrap-data-table-panel">
@@ -222,6 +225,58 @@ if(isset($_POST['action']) && ($_POST['action'] == "active" || $_POST['action'] 
     </div>
   </section>
 </section>
+
+   <script src="<?php echo HTTP_SERVER;?>assets/js/lib/data-table/datatables.min.js"></script>   
+        <script src="<?php echo HTTP_SERVER;?>assets/js/lib/data-table/dataTables.buttons.min.js"></script>
+        <script src="<?php echo HTTP_SERVER;?>assets/js/lib/data-table/buttons.flash.min.js"></script>
+        <script src="<?php echo HTTP_SERVER;?>assets/js/lib/data-table/jszip.min.js"></script>
+        <script src="<?php echo HTTP_SERVER;?>assets/js/lib/data-table/pdfmake.min.js"></script>
+        <script src="<?php echo HTTP_SERVER;?>assets/js/lib/data-table/vfs_fonts.js"></script>
+        <script src="<?php echo HTTP_SERVER;?>assets/js/lib/data-table/buttons.html5.min.js"></script>
+        <script src="<?php echo HTTP_SERVER;?>assets/js/lib/data-table/buttons.print.min.js"></script>
+        <script src="<?php echo HTTP_SERVER;?>assets/js/lib/data-table/datatables-init.js"></script>
+
+
+
+ <script type="text/javascript">
+
+
+/*function formsubmitsetaction(frmid,act,elemName,msg)
+{
+	//alert(frmid);
+	document.getElementById("action").value = act;
+	elem = document.getElementsByName(elemName);
+	var flg = false;
+	for(i=0;i<elem.length;i++){
+		if(elem[i].checked)
+		{
+			flg = true;
+			break;
+		}
+	}
+	
+	
+	if(flg)
+	{
+		//$("#myModal").modal("show");
+		$("#exampleModalLongTitle").html(act.toUpperCase());
+		$("#setmsg").html(msg);
+		$("#popbtnok").show();
+		$('#exampleModalCenter').modal('toggle');
+		$("#popbtnok").click(function(){
+			document.getElementById(frmid).submit();
+		});
+	}
+	else
+	{
+		//alert("Please select atlease one record");
+		$(".modal-title").html("WARNING");
+		$("#setmsg").html('Please select atlease one record');
+		$("#popbtnok").hide();
+		$('#exampleModalCenter').modal('toggle');
+	}
+}*/
+        </script>
 <?php } else {
 	include(DIR_ADMIN.'access_denied.php');
 }

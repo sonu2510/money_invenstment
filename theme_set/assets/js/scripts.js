@@ -109,21 +109,7 @@
 
 
 
-    /*  Chat Sidebar User custom Search
-    ---------------------------------------*/
-
-    $('[data-search]').on('keyup', function() {
-        var searchVal = $(this).val();
-        var filterItems = $('[data-filter-item]');
-
-        if (searchVal != '') {
-            filterItems.addClass('hidden');
-            $('[data-filter-item][data-filter-name*="' + searchVal.toLowerCase() + '"]').removeClass('hidden');
-        } else {
-            filterItems.removeClass('hidden');
-        }
-    });
-
+  
 
     /*  Chackbox all
     ---------------------------------------*/
@@ -133,27 +119,11 @@
     });
 
 
-    /*  Vertical Carousel
-    ---------------------------*/
+  
 
-    $('#verticalCarousel').carousel({
-        interval: 2000
-    })
-
-    $(window).bind("resize", function() {
-        console.log($(this).width())
-        if ($(this).width() < 680) {
-            $('.logo').addClass('hidden')
-            $('.sidebar').removeClass('sidebar-shrink')
-            $('.sidebar').removeClass('sidebar-shrink, sidebar-gestures')
-        }
-    }).trigger('resize');
-
-
-
-    /*  Search
+    /*  Searchtrhwrjtjwjwttjwtjjw
     ------------*/
-    $('a[href="#search"]').on('click', function(event) {
+          $('a[href="#search"]').on('click', function(event) {
                 event.preventDefault();
                 $('#search').addClass('open');
                 $('#search > form > input[type="search"]').focus();
@@ -172,15 +142,9 @@
                 return false;
             })
 
-    
+      
 
-    /*  pace Loader
-    -------------*/
-
-    paceOptions = {
-        elements: true
-    };
-
+  
 
 
 

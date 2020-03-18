@@ -3,12 +3,14 @@ class money_investment extends dbclass{
 	
 	public function addMoney($data){		
 	
+		if(isset($data['member_id']) && !empty($data['member_id'])){
+			$member_id=$data['member_id'];
+		}else{
+				$sql_member = "INSERT INTO " . DB_PREFIX . "members_details SET  member_name = '" . $data['member_name'] . "',status=1, date_added = NOW()";
+				$this->query($sql_member);
+				$member_id = $this->getLastId();
 
-		$sql_member = "INSERT INTO " . DB_PREFIX . "members_details SET  member_name = '" . $data['member_name'] . "',status=1, date_added = NOW()";
-		$this->query($sql_member);
-		$member_id = $this->getLastId();
-
-
+		}
 		$sql = "INSERT INTO " . DB_PREFIX . "add_money SET  member_name = '" . $data['member_name'] . "', member_id = '" . $member_id . "',date='".$data['date']."',amount='".$data['amount']."',remarks='".$data['remarks']."',date_added = '".date('Y-m-d H:i:s')."',date_modify = '".date('Y-m-d H:i:s')."'";
 	
 		$this->query($sql);
@@ -21,9 +23,18 @@ class money_investment extends dbclass{
 	
 		
 		//printr($data);die;
-	
-		$sql = "UPDATE " . DB_PREFIX . "add_money SET  member_name = '" . $data['member_name'] . "', date='".$data['date']."',amount='".$data['amount']."',remarks='".$data['remarks']."',date_modify ='".date('Y-m-d H:i:s')."' WHERE added_money_id = '".(int)$added_money_id."'";
-		//echo $sql;die;
+		
+		if(isset($data['member_id']) && !empty($data['member_id'])){
+			$member_id=$data['member_id'];
+		}else{
+				$sql_member = "INSERT INTO " . DB_PREFIX . "members_details SET  member_name = '" . $data['member_name'] . "',status=1, date_added = NOW()";
+				$this->query($sql_member);
+				$member_id = $this->getLastId();
+
+		}
+		//printr($member_id);die;
+		$sql = "UPDATE " . DB_PREFIX . "add_money SET  member_id='".$member_id."',member_name = '" . $data['member_name'] . "', date='".$data['date']."',amount='".$data['amount']."',remarks='".$data['remarks']."',date_modify ='".date('Y-m-d H:i:s')."' WHERE added_money_id = '".(int)$added_money_id."'";
+		
 		$this->query($sql);				
 	
 		
@@ -54,6 +65,19 @@ class money_investment extends dbclass{
 		$sql = "SELECT * FROM " . DB_PREFIX ."add_money WHERE  is_delete=0";
 		
 		
+		$data = $this->query($sql);
+		if($data->num_rows){
+			return $data->rows;
+		}else{
+			return false;
+		}
+	}
+	
+	public function member_Details($name){ 
+		
+		$sql = "SELECT * FROM " . DB_PREFIX ."members_details WHERE  is_delete=0 AND member_name LIKE'%".$name."%'";
+		
+		//echo $sql;
 		$data = $this->query($sql);
 		if($data->num_rows){
 			return $data->rows;
